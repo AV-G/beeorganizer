@@ -11,13 +11,13 @@ import android.widget.LinearLayout;
 import com.google.android.material.button.MaterialButton;
 
 public class HomeActivity extends AppCompatActivity {
-Button newbtn;
+    Button newBeeHouseButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button btn = (Button) findViewById(R.id.btn1);
-        btn.setOnClickListener(new View.OnClickListener() {
+        Button createBeeHouseButton = (Button) findViewById(R.id.btn1);
+        createBeeHouseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addButton();
@@ -28,15 +28,15 @@ Button newbtn;
 
     public void addButton() {
         LinearLayout layout = (LinearLayout) findViewById(R.id.rootlayout);
-        newbtn = new MaterialButton(this);
-        newbtn.setText("Čebeljnjak X");
-        newbtn.setOnClickListener(new View.OnClickListener() {
+        newBeeHouseButton = new MaterialButton(this);
+        newBeeHouseButton.setText("Čebeljnjak X");
+        newBeeHouseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToBeeHouseActivity();
             }
         });
-        layout.addView(newbtn);
+        layout.addView(newBeeHouseButton);
     }
 
     public void goToBeeHouseActivity() {
