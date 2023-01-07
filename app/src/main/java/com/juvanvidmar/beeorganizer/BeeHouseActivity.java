@@ -10,5 +10,6 @@ public class BeeHouseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bee_house);
+        this.setTitle("Čebeljnjak Placeholder");
     }
 }
