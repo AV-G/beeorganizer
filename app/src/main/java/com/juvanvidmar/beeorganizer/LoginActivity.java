@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -31,9 +32,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText mail;
     private EditText password;
+    private TextView status;
 
     private RequestQueue requestQueue;
-    private String url = "https://thebeeorganizer.azurewebsites.net/api/v1/login";
+    private String url = "https://thebeeorganizer.azurewebsites.net/api/login";
 
 
     @Override
@@ -43,63 +45,59 @@ public class LoginActivity extends AppCompatActivity {
 
         mail = (EditText) findViewById(R.id.TEemail);
         password = (EditText) findViewById(R.id.TEpassword);
+        status = (TextView) findViewById(R.id.TVstatus);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+        status.setText("Status: on stand by!");
+        this.setTitle("BeeOrganizer - Login");
+        password.setText("");
+        mail.setText("");
     }
+    public void startLogin(View view) {
+        // Create the post data
+        status.setText("Status: processing!");
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String postData = "{\"username\": \"" + mail.getText() + "\", \"password\": \"" + password.getText() + "\"}";
 
-    public void addStudent(View view){
-
+        // Create the request
+        JsonObjectRequest request = null;
         try {
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("username", mail.getText());
-            jsonBody.put("password", password.getText());
+            request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    new JSONObject(postData),
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            final String mRequestBody = jsonBody.toString();
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("LOG_VOLLEY", response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("LOG_VOLLEY", error.toString());
-                }
-            }
-            ) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
-                        return null;
+                            try {
+                                editor.putString("apiKey", response.getString("apiKey"));
+                                editor.putString("id", response.getString("id"));
+                                editor.putString("username", response.getString("username"));
+                                editor.putString("firstName", response.getString("firstName"));
+                                editor.putString("lastName", response.getString("lastName"));
+                                editor.apply();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // Redirect to the new activity
+                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(intent);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            status.setText("Status: login unsuccessful!");
+                        }
                     }
-                }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    if (response != null) {
-                        responseString = String.valueOf(response.statusCode);
-                        SharedPreferences sharedPref = getSharedPreferences("user", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("key_name", "string_value");
-                        editor.apply();
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-
-            };
-
-            requestQueue.add(stringRequest);
-
+            );
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        // Add the request to the RequestQueue
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 }
