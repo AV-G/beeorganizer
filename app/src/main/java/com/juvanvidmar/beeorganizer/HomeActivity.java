@@ -82,8 +82,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         layout.addView(newBeeHouseButton);
-
-
     }
 
     public void getDogodki() {
@@ -130,8 +128,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public  void getBeeHouses(){
-        //JsonArrayRequest request = new JsonArrayRequest(url, jsonArrayListener, errorListener);
-        //requestQueue.add(request);
         JsonArrayRequest jsonArrayRequest2 = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -163,36 +159,6 @@ public class HomeActivity extends AppCompatActivity {
                 });
         requestQueue.add(jsonArrayRequest2);
       }
-
-//    private Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
-//        @Override
-//        public void onResponse(JSONArray response){
-//            for (int i = 0; i < response.length(); i++){
-//                try {
-//                    JSONObject object =response.getJSONObject(i);
-//                    int id = object.getInt("id");
-//                    String uId = object.getString("uporabnikId");
-//                    String name = object.getString("naslov");
-//                    if(uId.equals(userId)) {
-//                        addButton(name, id);
-//                    }
-//
-//
-//                } catch (JSONException e){
-//                    e.printStackTrace();
-//                    return;
-//                }
-//            }
-//        }
-//    };
-
-    private Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-        public void onErrorResponse(VolleyError error) {
-                Log.d("REST error", error.getMessage());
-        }
-    };
-
 
     public void goToBeeHouseActivity(int id) {
         Intent intent = new Intent(getApplicationContext(), BeeHouseActivity.class);

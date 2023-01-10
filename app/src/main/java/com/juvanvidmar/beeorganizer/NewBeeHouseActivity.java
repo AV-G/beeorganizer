@@ -52,8 +52,7 @@ public class NewBeeHouseActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(intent);
+                goToHomeActivity();
             }
         });
 
@@ -125,5 +124,8 @@ public class NewBeeHouseActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+    public void goToHomeActivity() {
+        this.finish();
     }
 }
