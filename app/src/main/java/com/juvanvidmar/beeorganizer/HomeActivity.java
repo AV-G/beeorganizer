@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -16,6 +17,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -31,8 +34,10 @@ import com.google.android.material.button.MaterialButton;
 public class HomeActivity extends AppCompatActivity {
     Button newBeeHouseButton;
     private RequestQueue requestQueue;
-    private TextView osebe;
+    private TextView dogodekLable;
+    private TextView dogodki;
     private String url = "https://thebeeorganizer.azurewebsites.net/api/v1/cabeljnjak/";
+    private String url2 = "https://thebeeorganizer.azurewebsites.net/api/v1/dogodek/";
     private String userId;
 
     @Override
@@ -40,7 +45,20 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
-        Button createBeeHouseButton = (Button) findViewById(R.id.btn1);
+
+        dogodekLable = (TextView) findViewById(R.id.TVDogodekLable);
+        dogodki = (TextView) findViewById(R.id.TVdogodki);
+        dogodekLable.setText("Dogodek:");
+        dogodki.setText("");
+        Button but = (Button) findViewById(R.id.btn1);
+        but.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), NewBeeHouseActivity.class);
+                startActivity(intent);
+            }
+        });
 
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String firstName =  sharedPreferences.getString("firstName", "");
@@ -49,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
 
         this.setTitle("Dobrodošel "+firstName + " " +lastName);
         getBeeHouses();
+        getDogodki();
     }
 
     public void addButton(String name, int id) {
@@ -63,51 +82,122 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         layout.addView(newBeeHouseButton);
+
+
+    }
+
+    public void getDogodki() {
+        dogodekLable.setText("Dogodek - loading:");
+        JsonArrayRequest jsonArrayRequest1 = new JsonArrayRequest(Request.Method.GET, url2, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        String currentText = (String) dogodki.getText();
+                        String newText;
+                        boolean pog = false;
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object =response.getJSONObject(i);
+                                newText ="Naziv: " + object.getString("naziv") +
+                                        " Lokacija: " + object.getString("naziv") +
+                                        " Opis: " + object.getString("opis");
+
+                                if (pog) {
+                                    dogodki.setText(currentText + "\n\n" + newText );
+                                } else {
+                                    dogodki.setText(newText );
+                                    pog = true;
+                                }
+
+
+                            } catch (JSONException e){
+                                e.printStackTrace();
+                                return;
+                            }
+
+                        }
+                        dogodekLable.setText("Dogodek:");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        dogodekLable.setText("Dogodek - error:");
+                        dogodki.setText("Sorry - something go wrong!");
+                    }
+                });
+        requestQueue.add(jsonArrayRequest1);
     }
 
     public  void getBeeHouses(){
+        //JsonArrayRequest request = new JsonArrayRequest(url, jsonArrayListener, errorListener);
+        //requestQueue.add(request);
+        JsonArrayRequest jsonArrayRequest2 = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        String currentText = (String) dogodki.getText();
+                        String newText;
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object =response.getJSONObject(i);
+                                int id = object.getInt("id");
+                                String uId = object.getString("uporabnikId");
+                                String name = object.getString("naslov");
+                                if(uId.equals(userId)) {
+                                    addButton(name, id);
+                                }
 
-        JsonArrayRequest request = new JsonArrayRequest(url+userId, jsonArrayListener, errorListener);
-        requestQueue.add(request);
 
-    }
+                            } catch (JSONException e){
+                                e.printStackTrace();
+                                return;
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+        requestQueue.add(jsonArrayRequest2);
+      }
 
-    private Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
-        @Override
-        public void onResponse(JSONArray response){
-            ArrayList<String> data = new ArrayList<>();
-
-            for (int i = 0; i < response.length(); i++){
-                try {
-                    JSONObject object =response.getJSONObject(i);
-                    int id = object.getInt("id");
-                    String name = object.getString("naslov");
-
-                    addButton(name, id);
-
-                } catch (JSONException e){
-                    e.printStackTrace();
-                    return;
-                }
-            }
-        }
-    };
+//    private Response.Listener<JSONArray> jsonArrayListener = new Response.Listener<JSONArray>() {
+//        @Override
+//        public void onResponse(JSONArray response){
+//            for (int i = 0; i < response.length(); i++){
+//                try {
+//                    JSONObject object =response.getJSONObject(i);
+//                    int id = object.getInt("id");
+//                    String uId = object.getString("uporabnikId");
+//                    String name = object.getString("naslov");
+//                    if(uId.equals(userId)) {
+//                        addButton(name, id);
+//                    }
+//
+//
+//                } catch (JSONException e){
+//                    e.printStackTrace();
+//                    return;
+//                }
+//            }
+//        }
+//    };
 
     private Response.ErrorListener errorListener = new Response.ErrorListener() {
-        @Override
+            @Override
         public void onErrorResponse(VolleyError error) {
-            Log.d("REST error", error.getMessage());
+                Log.d("REST error", error.getMessage());
         }
     };
 
 
     public void goToBeeHouseActivity(int id) {
-        Intent intent = new Intent(this, BeeHouseActivity.class);
+        Intent intent = new Intent(getApplicationContext(), BeeHouseActivity.class);
+        intent.putExtra("beeHouseId", id);
         startActivity(intent);
     }
 
-    public void goToNewBeeHouseActivity() {
-        Intent intent = new Intent(this, NewBeeHouseActivity.class);
-        startActivity(intent);
-    }
 }

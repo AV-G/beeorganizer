@@ -6,4 +6,72 @@
     android:layout_height="match_parent"
     tools:context=".NewBeeHouseActivity">
 
+    <EditText
+        android:id="@+id/ETstPanjev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Št. panjev"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:text="Naziv čebeljnjaka: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/ETnazivCebeljnjaka"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Naziv čebeljnjaka"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Število panjev:"
+        app:layout_constraintStart_toStartOf="@+id/ETnazivCebeljnjaka"
+        app:layout_constraintTop_toBottomOf="@+id/ETnazivCebeljnjaka" />
+
+    <Button
+        android:id="@+id/butSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Dodaj"
+        app:layout_constraintStart_toStartOf="@+id/ETstPanjev"
+        app:layout_constraintTop_toBottomOf="@+id/ETstPanjev" />
+
+    <Button
+        android:id="@+id/butPrekliciCebeljnjak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Prekliči"
+        app:layout_constraintStart_toStartOf="@+id/butSubmit"
+        app:layout_constraintTop_toBottomOf="@+id/butSubmit" />
+
+    <TextView
+        android:id="@+id/TVstatusPostCebeljnjak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/butSubmit"
+        app:layout_constraintStart_toEndOf="@+id/butSubmit"
+        app:layout_constraintTop_toTopOf="@+id/butSubmit" />
 </androidx.constraintlayout.widget.ConstraintLayout>
