@@ -14,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
@@ -24,23 +25,27 @@ public class BeeHouseActivity extends AppCompatActivity {
 
     Button newBeeHouseButton;
     private RequestQueue requestQueue;
-    private String url = "https://thebeeorganizer.azurewebsites.net/api/v1/panj/";
+    private String url = "https://thebeeorganizer.azurewebsites.net/api/PanjApi";
     private int beeHouseId;
+    private String beeHouseName;
     private TextView status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bee_house);
-        status = (TextView) findViewById(R.id.tvStatusHive);
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+        status = (TextView) findViewById(R.id.tvStatusBeeHouse);
         status.setText("");
+
         Intent iin= getIntent();
         Bundle b = iin.getExtras();
         if(b!=null)
         {
             beeHouseId =(int) b.get("beeHouseId");
+            beeHouseName = (String) b.get("beeHouseName");
         }
-        this.setTitle("Čebeljnjak");
+        this.setTitle("Čebeljnjak " + beeHouseName);
 
         Button goBackButton = (Button) findViewById(R.id.button4);
         goBackButton.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +54,7 @@ public class BeeHouseActivity extends AppCompatActivity {
                 goToHomeActivity();
             }
         });
+        getHives();
     }
 
     public  void getHives(){
@@ -60,18 +66,22 @@ public class BeeHouseActivity extends AppCompatActivity {
                          for (int i = 0; i < response.length(); i++){
                             try {
                                 JSONObject object =response.getJSONObject(i);
-                                int id = object.getInt("id");
-                                String houseId = object.getString("cebeljnjakID");
+                                int id = object.getInt("panjID");
+                                status.setText("id good"+id);
+                                int houseId = object.getInt("cebeljnjakID");
+                                status.setText("houseId good"+houseId);
                                 String name = object.getString("naziv");
-                                if(houseId.equals(beeHouseId)) {
+                                status.setText("name good"+name);
+                                if(houseId == beeHouseId) {
                                     addButton(name, id);
                                 }
                             } catch (JSONException e){
+                                status.setText("Error");
                                 e.printStackTrace();
                                 return;
                             }
-                             status.setText("Done");
                         }
+                         status.setText("");
                     }
                 },
                 new Response.ErrorListener() {
@@ -84,22 +94,24 @@ public class BeeHouseActivity extends AppCompatActivity {
     }
 
     public void addButton(String name, int id) {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.rootlayout2);
+        status.setText("Creating");
+        LinearLayout layout = (LinearLayout) findViewById(R.id.rootlayoutBeeHouse);
         newBeeHouseButton = new MaterialButton(this);
         newBeeHouseButton.setText(name);
         newBeeHouseButton.setTag(id);
         newBeeHouseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToHiveActivity(id);
+                goToHiveActivity(id, name);
             }
         });
         layout.addView(newBeeHouseButton);
     }
 
-    public void goToHiveActivity(int id) {
-        Intent intent = new Intent(getApplicationContext(), BeeHouseActivity.class);
-        intent.putExtra("beeHouseId", id);
+    public void goToHiveActivity(int id, String name) {
+        Intent intent = new Intent(getApplicationContext(), HiveActivity.class);
+        intent.putExtra("hiveId", id);
+        intent.putExtra("hiveName", name);
         startActivity(intent);
     }
 

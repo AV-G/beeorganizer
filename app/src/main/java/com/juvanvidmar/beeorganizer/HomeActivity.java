@@ -5,18 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,7 +19,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.ArrayList;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -71,14 +62,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void addButton(String name, int id) {
-        LinearLayout layout = (LinearLayout) findViewById(R.id.rootlayout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.rootlayoutBeeHouse);
         newBeeHouseButton = new MaterialButton(this);
         newBeeHouseButton.setText(name);
         newBeeHouseButton.setTag(id);
         newBeeHouseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToBeeHouseActivity(id);
+                goToBeeHouseActivity(id, name);
             }
         });
         layout.addView(newBeeHouseButton);
@@ -160,9 +151,10 @@ public class HomeActivity extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest2);
       }
 
-    public void goToBeeHouseActivity(int id) {
+    public void goToBeeHouseActivity(int id, String name) {
         Intent intent = new Intent(getApplicationContext(), BeeHouseActivity.class);
         intent.putExtra("beeHouseId", id);
+        intent.putExtra("beeHouseName", name);
         startActivity(intent);
     }
 
