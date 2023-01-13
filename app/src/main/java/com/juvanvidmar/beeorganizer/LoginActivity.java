@@ -49,8 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         status.setText("Status: on stand by!");
         this.setTitle("BeeOrganizer - Login");
-        password.setText("Test123!");
-        mail.setText("1@test.si");
+        mail.setText("");//1@test.si
+        password.setText("");//Test123!
     }
     public void startLogin(View view) {
         // Create the post data

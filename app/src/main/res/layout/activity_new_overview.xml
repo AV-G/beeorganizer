@@ -7,6 +7,15 @@
     tools:context=".NewOverviewActivity">
 
     <Button
+        android:id="@+id/butSubmit2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Dodaj"
+        app:layout_constraintStart_toStartOf="@+id/etKratekOpis"
+        app:layout_constraintTop_toBottomOf="@+id/swMatica" />
+
+    <Button
         android:id="@+id/butBackNewOverview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,11 +29,11 @@
         android:id="@+id/tvOverview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginStart="16dp"
+        android:text="Status"
+        app:layout_constraintBottom_toBottomOf="@+id/butSubmit2"
+        app:layout_constraintStart_toEndOf="@+id/butSubmit2"
+        app:layout_constraintTop_toTopOf="@+id/butSubmit2" />
 
     <EditText
         android:id="@+id/etKratekOpis"
@@ -48,7 +57,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/etMoc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -67,56 +76,56 @@
         app:layout_constraintTop_toBottomOf="@+id/etKratekOpis" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/swCistost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Čistost: "
-        app:layout_constraintStart_toStartOf="@+id/editTextNumber"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+        app:layout_constraintStart_toStartOf="@+id/etMoc"
+        app:layout_constraintTop_toBottomOf="@+id/etMoc" />
 
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/swMirnost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Mirnost: "
-        app:layout_constraintStart_toStartOf="@+id/switch1"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+        app:layout_constraintStart_toStartOf="@+id/swCistost"
+        app:layout_constraintTop_toBottomOf="@+id/swCistost" />
 
     <Switch
-        android:id="@+id/switch3"
+        android:id="@+id/swRojivost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Rojivost: "
-        app:layout_constraintStart_toStartOf="@+id/switch2"
-        app:layout_constraintTop_toBottomOf="@+id/switch2" />
+        app:layout_constraintStart_toStartOf="@+id/swMirnost"
+        app:layout_constraintTop_toBottomOf="@+id/swMirnost" />
 
     <Switch
-        android:id="@+id/switch4"
+        android:id="@+id/swZalega"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Zalega:"
-        app:layout_constraintStart_toStartOf="@+id/switch3"
-        app:layout_constraintTop_toBottomOf="@+id/switch3" />
+        app:layout_constraintStart_toStartOf="@+id/swRojivost"
+        app:layout_constraintTop_toBottomOf="@+id/swRojivost" />
 
     <Switch
-        android:id="@+id/switch5"
+        android:id="@+id/swZaloga"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Zaloga hrane:"
-        app:layout_constraintStart_toStartOf="@+id/switch4"
-        app:layout_constraintTop_toBottomOf="@+id/switch4" />
+        app:layout_constraintStart_toStartOf="@+id/swZalega"
+        app:layout_constraintTop_toBottomOf="@+id/swZalega" />
 
     <Switch
-        android:id="@+id/switch6"
+        android:id="@+id/swMatica"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Menjava matice:"
-        app:layout_constraintStart_toStartOf="@+id/switch5"
-        app:layout_constraintTop_toBottomOf="@+id/switch5" />
+        app:layout_constraintStart_toStartOf="@+id/swZaloga"
+        app:layout_constraintTop_toBottomOf="@+id/swZaloga" />
 </androidx.constraintlayout.widget.ConstraintLayout>

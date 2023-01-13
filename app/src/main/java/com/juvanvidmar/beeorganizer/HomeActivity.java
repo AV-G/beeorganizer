@@ -85,6 +85,7 @@ public class HomeActivity extends AppCompatActivity {
                         String newText;
                         boolean pog = false;
                         for (int i = 0; i < response.length(); i++){
+                            currentText = (String) dogodki.getText();
                             try {
                                 JSONObject object =response.getJSONObject(i);
                                 newText ="Naziv: " + object.getString("naziv") +

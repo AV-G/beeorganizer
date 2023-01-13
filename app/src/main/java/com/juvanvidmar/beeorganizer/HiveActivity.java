@@ -27,6 +27,7 @@ public class HiveActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String url = "https://thebeeorganizer.azurewebsites.net/api/v1/Evidenvca";
     private int hiveId;
+    private String hiveName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +43,8 @@ public class HiveActivity extends AppCompatActivity {
         Bundle b = iin.getExtras();
         if (b != null) {
             hiveId = (int) b.get("hiveId");
-            String name = (String) b.get("hiveName");
-            this.setTitle(name);
+            hiveName = (String) b.get("hiveName");
+            this.setTitle(hiveName);
         } else
         {
             this.setTitle("Panj");
@@ -68,6 +69,14 @@ public class HiveActivity extends AppCompatActivity {
         getEvidences();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        evidence.setText("");
+        getEvidences();
+
+    }
+
     public void getEvidences() {
         status.setText("Processing!");
         JsonArrayRequest jsonArrayRequest1 = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -78,6 +87,7 @@ public class HiveActivity extends AppCompatActivity {
                         String newText;
                         boolean pog = false;
                         for (int i = 0; i < response.length(); i++){
+                            currentText = (String) evidence.getText();
                             try {
                                 JSONObject object =response.getJSONObject(i);
                                 if (hiveId == object.getInt("panjId"))
@@ -117,6 +127,8 @@ public class HiveActivity extends AppCompatActivity {
 
     public void goToNewOverview() {
         Intent intent = new Intent(getApplicationContext(), NewOverviewActivity.class);
+        intent.putExtra("hiveId", hiveId);
+        intent.putExtra("hiveName", hiveName);
         startActivity(intent);
     }
 }
